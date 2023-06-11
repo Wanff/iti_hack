@@ -55,7 +55,7 @@ def histogram(arr, title):
     # Show plot
     plt.show()
 
-def plot_head_probes(iti, head_accs, title, sort = True):
+def plot_head_probes(iti, head_accs, title, sort = True, baseline_overwrite = None):
     baseline_acc = 1 - sum(iti.dataset.all_labels) / len(iti.dataset.all_labels)
     
     if sort:
@@ -63,5 +63,8 @@ def plot_head_probes(iti, head_accs, title, sort = True):
     else:
         accs = head_accs.reshape(iti.model.cfg.n_layers, iti.model.cfg.n_heads)
     
+    if baseline_overwrite is not None:
+        baseline_acc = baseline_overwrite
+        
     fig = px.imshow(accs, labels = {"x" : "Heads", "y": "Layers"},title = title + f" Baseline Acc: {np.round(baseline_acc, 3)}", color_continuous_midpoint = baseline_acc, color_continuous_scale="RdBu", origin = "lower")
     fig.show()
